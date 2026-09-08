@@ -1,0 +1,2 @@
+/usr/bin/ar qc libwavesim_core.a CMakeFiles/wavesim_core.dir/PropagationChannel.cpp.o CMakeFiles/wavesim_core.dir/SignalGenerator.cpp.o CMakeFiles/wavesim_core.dir/Simulation.cpp.o
+/usr/bin/ranlib libwavesim_core.a

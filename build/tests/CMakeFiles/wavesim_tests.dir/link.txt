@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/wavesim_tests.dir/test_main.cpp.o CMakeFiles/wavesim_tests.dir/test_vec3.cpp.o CMakeFiles/wavesim_tests.dir/test_trajectory.cpp.o CMakeFiles/wavesim_tests.dir/test_propagation_channel.cpp.o CMakeFiles/wavesim_tests.dir/test_signal_generator.cpp.o CMakeFiles/wavesim_tests.dir/test_simulation.cpp.o -o wavesim_tests  ../src/core/libwavesim_core.a
