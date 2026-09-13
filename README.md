@@ -21,6 +21,47 @@ correspondant.
 - [Tests unitaires](#tests-unitaires)
 - [Compiler et exécuter](#compiler-et-exécuter)
 
+## Aperçu
+
+Scénario par défaut : survol rectiligne à 200 m/s, altitude 50 m, porteuse
+100 MHz, bruit gaussien activé (SNR 23 dB).
+
+![Vue d'ensemble de l'application](docs/screenshots/overview.png)
+
+Le décalage Doppler dessine la "courbe en S" caractéristique du survol
+(positif à l'approche, franchit zéro à la distance minimale, négatif à
+l'éloignement) ; la puissance reçue en dBm suit une courbe en cloche
+(maximale à la distance minimale, conforme à la loi en `1/d²`) ; le signal
+temporel en bande de base oscille plus vite quand `|delta_f|` est grand, et
+ralentit visiblement autour du passage à zéro du Doppler :
+
+![Les trois graphiques : Doppler, puissance, signal](docs/screenshots/plots.png)
+
+Panneau de contrôle :
+
+![Panneau de contrôle](docs/screenshots/controls.png)
+
+**Un bogue réel trouvé grâce à ces captures.** La toute première version de
+la vue 2D (`TrajectoryView`) ressemblait à ceci — quasiment vide, les
+marqueurs Rx/Tx écrasés dans une mince bande horizontale :
+
+![Bogue : vue 2D presque vide avant correction](docs/screenshots/trajectory-view.png)
+
+Cause : la trajectoire rectiligne par défaut se déplace uniquement selon
+l'axe X (`y=0` constant), tout comme le récepteur. La boîte englobante
+monde en Y était donc quasi nulle (~0 m) contre ~2000 m en X. Comme
+`TrajectoryView` impose une échelle UNIQUE pour préserver le rapport
+d'aspect (correct — voir la section Interface graphique), cette échelle
+minuscule s'appliquait aussi à la petite étendue Y, écrasant tout au centre
+du widget. Corrigé en imposant une étendue minimale par axe égale à une
+fraction de l'autre axe (voir [TrajectoryView.cpp](src/gui/TrajectoryView.cpp)) :
+une trajectoire "plate" garde maintenant de la place pour être lisible, sans
+affecter les trajectoires circulaires (déjà équilibrées en X et Y). C'est un
+bon exemple de bogue qu'aucun test unitaire n'aurait attrapé (c'est du rendu
+Qt, hors du périmètre testé par doctest) — seule une vraie capture d'écran
+l'a révélé.
+
+
 ## Physique et équations
 
 Toutes les grandeurs sont en unités SI (mètres, secondes, Hz, Watts) sauf
